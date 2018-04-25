@@ -1,0 +1,33 @@
+# by default, handle everything except this file with LFS
+* binary
+.gitattributes text diff
+
+# selectively turn off handling for certain extensions
+*.flan text diff
+*.flct text diff
+*.flpj text diff
+*.flyt text diff
+*.fx text diff
+*.glsl text diff
+*.hlsl text diff
+*.gsh text diff
+*.h text diff
+*.inc text diff
+*.lua text diff merge
+*.msproj text diff eol=crlf
+*.mstxt text diff eol=crlf
+*.vsh text diff
+*.xml text diff
+*.yml text diff merge
+
+# Copied from main .gitattributes
+*.bcfnt filter=lfs diff=lfs merge=lfs
+*.bffnt filter=lfs diff=lfs merge=lfs
+*.bmp filter=lfs diff=lfs merge=lfs
+*.cmdl filter=lfs diff=lfs merge=lfs
+*.cskla filter=lfs diff=lfs merge=lfs
+*.dll filter=lfs diff=lfs merge=lfs
+*.exe filter=lfs diff=lfs merge=lfs
+*.lib filter=lfs diff=lfs merge=lfs
+*.tga filter=lfs diff=lfs merge=lfs
+*.wav filter=lfs diff=lfs merge=lfs

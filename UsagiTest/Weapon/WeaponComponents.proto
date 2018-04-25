@@ -1,0 +1,25 @@
+/****************************************************************************
+//	Usagi Engine, Copyright © Vitei, Inc. 2013
+****************************************************************************/
+import 'nanopb.proto';
+import 'Engine/Maths/Maths.proto';
+import 'UsagiTest/Input/ShipControlEnums.proto';
+
+package Components;
+
+message GunComponent
+{
+	required float fireRate = 1 [default = 2.0];
+	required float fireCountdown = 2 [default = 0];
+}
+
+message ConstantForce
+{
+	required bool bWorldSpace = 1 [default = false];
+	required usg.Vector3f vForce = 2;
+}
+
+message Projectile
+{
+
+}

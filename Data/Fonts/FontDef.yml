@@ -1,0 +1,7 @@
+FontName: "arial"
+SourceFont: "Data/Fonts/JKG-M_3.ttf"
+Size: 24
+Spacing: 0.05
+Bold: true 
+Underscore: false
+LetterList: "家族 1234567890-_+=[]{};:',./?|#@~abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

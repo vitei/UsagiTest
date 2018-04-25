@@ -1,0 +1,18 @@
+TransformComponent:
+MatrixComponent:
+ModelComponent:
+  name: test/cubelarge.vmdf
+  bDynamic: true
+MeshCollider:
+  bConvex: false
+  bFlipNormals: true
+  szCollisionModel: "collision/cubelarge.coll"
+  material:
+    fDynamicFriction: 0.500
+    fStaticFriction: 0.50
+    fBounciness: 0.00
+    eRestitutionCombineMode: <%= Usg::CombineMode::MIN %>  
+CollisionMasks:
+  uGroup: <%= ::SpaceSimCollisionMask::COLLM_CAPSHIP %>
+RigidBody:
+  bDynamic: false    

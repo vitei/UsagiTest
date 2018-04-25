@@ -1,0 +1,53 @@
+TransformComponent:
+MatrixComponent:
+NetworkOwner:
+PlayerShipController:
+ShipControlInput:
+SoundActorComponent:
+SoundComponent:
+PitchModulator:
+RigidBody:
+  bDynamic: true
+  bEnableCCD: true
+  fDensity: 0.1
+#  fMass: 1.0
+  bDisableGravity: true
+  fLinearDamping: 2.0
+  fAngularDamping: 4.0
+SphereCollider:
+  vCenter: {x: 0.0, y: 0.0, z: 0.0}
+  fRadius: 5.0
+  material:
+    fDynamicFriction: 0.0
+    fStaticFriction: 0.0
+    fBounciness: 1.0 # Assuming it has a shield so it's bouncing off
+    eRestitutionCombineMode: <%= Usg::CombineMode::MAX %>
+    eFrictionCombineMode:  <%= Usg::CombineMode::MIN %>
+CollisionMasks:
+  uGroup: <%= Usg::CollisionMask::COLLM_PLAYER %>  
+Identifier:
+  name: "player"
+GunComponent:
+  fireRate: 10.0
+ModelComponent:
+  name: test/Fighter.vmdf
+  bDynamic: true
+InitializerEvents:
+  - PlaySound:
+      uAudioID: <%= Zlib::crc32('ENGINE_SOUND') %>
+      bPositional: true
+Children:
+  - Identifier:
+      name: "cam"
+    HMDCameraComponent:
+    CameraComponent:
+      fFOV: 40.0
+      fNearPlaneDist: 0.1
+      fFarPlaneDist: 1000.0
+    TransformComponent:
+      position: {x: 0, y: 6.0, z: -25.0}
+    MatrixComponent:
+    AudioListenerComponent:
+    InitializerEvents:
+      - SetFieldOfView:
+          fFOV: 40.0

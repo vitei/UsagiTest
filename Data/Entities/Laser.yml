@@ -1,0 +1,49 @@
+TransformComponent:
+MatrixComponent:
+StateComponent:
+NetworkOwner:
+Lifetime:
+Projectile:
+MaxLifetime:
+  fMaxLifetime: 5.0
+ConstantForce:
+  vForce: { x: 0.0, y: 0.0, z: 1000.0 }
+RigidBody:
+  fMass: 10
+  bDynamic: true
+  bKinematic: false
+  bDisableImpulses: true
+  bEnableCCD: true # CCD prevents the from tunneling through objects
+  bDisableGravity: true
+SphereCollider:
+  fRadius: 1.0
+CollisionMasks:
+  uGroup: <%= Usg::CollisionMask::COLLM_PROJECTILE %> 
+ModelComponent:
+  name: test/cube.vmdf
+  bShadowCast: false
+SoundComponent:  
+LightComponent:
+  spec: 
+    base:
+      kind: <%= Usg::LightKind::POINT %>  
+      ambient: { m_fR: 0.1, m_fG: 0.0, m_fB: 0.0, m_fA: 1.0 }
+      diffuse: { m_fR: 2.0, m_fG: 1.0, m_fB: 1.0, m_fA: 1.0 }
+      specular: { m_fR: 2.0, m_fG: 1.0, m_fB: 1.0, m_fA: 1.0 }
+      direction: { x: 0.0, y: 0.0, z: 1.0 }
+      #bShadow: true
+    proj:
+      texName: origin
+      fFov: 30
+    atten:
+      bEnabled: true
+      fNear: 15.0
+      fFar: 40.0
+    spot:
+      fInnerAngle: 15.0
+      fOuterAngle: 45.0
+  bFullIntensity: true
+InitializerEvents:
+  - PlaySound:
+      uAudioID: <%= Zlib::crc32('LASER_FIRE') %>
+      bPositional: true  

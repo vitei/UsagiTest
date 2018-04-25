@@ -1,0 +1,14 @@
+KeystringTable:
+  keyStrings:
+  - key: "Test"
+    text: "Usagi Test App"
+    style:
+      charHeight: 12
+      charSpacing: 0.05
+      lineSpacing: 0.3
+      displayLines: 1
+      fontName: arialbd
+      color: { m_fR: 1.0, m_fG: 1.0, m_fB: 1.0, m_fA: 1.0 }
+      backgroundColor: { m_fR: 1.0, m_fG: 1.0, m_fB: 1.0, m_fA: 1.0 }
+      tabWidth: 2.0
+   

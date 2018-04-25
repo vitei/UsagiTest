@@ -1,0 +1,30 @@
+<% include Usg::SkeletalAnim %>
+
+AnimChain:
+  entryState: "State1"
+  conditions:
+    - name: "DoSomething"
+      value: false    
+  events:
+    - name: "DoSomethingEvent"
+  states:
+    - stateName: "State1"
+      bHidden: true
+      anim:
+        animName:  "test/Take 001"
+        playbackSpeed: 1.0
+      transitions:
+        - targetState: "State2"
+          conditions:
+            - name: "DoSomething"
+              value: true
+    - stateName: "State2"
+      anim:
+        animName:  "test/Take 001"
+        playbackSpeed: 1.0
+      transitions:
+        - targetState: "State1"
+          blendInTime: 0.2
+          conditions:
+            - name: "DoSomething"
+              value: false

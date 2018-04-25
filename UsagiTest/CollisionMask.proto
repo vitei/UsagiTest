@@ -1,0 +1,11 @@
+import 'nanopb.proto';
+import 'Engine/Core/usagipb.proto';
+
+enum SpaceSimCollisionMask {
+	option (nanopb_enumopt).long_names = false;
+	option (usagipb_enumopt).is_bitmask = true;
+
+	// Entries until 0x80 are reserved for the engine.
+
+	COLLM_CAPSHIP				= 0x00000100;
+}

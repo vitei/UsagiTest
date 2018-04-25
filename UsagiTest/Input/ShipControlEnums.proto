@@ -1,0 +1,31 @@
+/****************************************************************************
+//	Usagi Engine, Copyright © Vitei, Inc. 2013
+****************************************************************************/
+import 'nanopb.proto';
+import 'Engine/Maths/Maths.proto';
+
+// IF YOU ADD VALUES HERE ADJUST THE SIZES IN SHIP CONTROL COMPONENTS!!
+// FIXME: Need enum values as max_length values for nanopb
+
+enum ShipControlAxis {
+	option (nanopb_enumopt).long_names = false;
+
+	SHIP_AXIS_YAW = 0;
+	SHIP_AXIS_PITCH = 1;
+	SHIP_AXIS_ROLL = 2;
+	SHIP_AXIS_THROTTLE = 3;
+	SHIP_AXIS_COUNT = 4;
+}
+
+
+enum ShipControlBool {
+	option (nanopb_enumopt).long_names = false;
+
+	SHIP_BOOL_FIRE = 0;
+	SHIP_BOOL_NEXT_TARGET = 1;
+	SHIP_BOOL_PREV_TARGET = 2;
+	SHIP_BOOL_NEAREST_TARGET = 3;
+	SHIP_BOOL_COUNT = 4;
+}
+
+

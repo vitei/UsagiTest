@@ -1,0 +1,66 @@
+AudioBank:
+  soundFiles:
+  - enumName: ENGINE_SOUND
+    filename: engineloop
+    stream: true
+    loop: true
+    volume: 0.5
+    minDistance: 1
+    maxDistance: 20
+    eType: 1
+    eFalloff: 0
+    pitchRandomisation: 0.5
+    priority: 128
+    crossfade: 
+    basePitch: 1
+    dopplerFactor: 0
+    localized: false
+    crc: 1199070185
+  - enumName: IMPACT
+    filename: explosionsm
+    stream: false
+    loop: false
+    volume: 0.4
+    minDistance: 10
+    maxDistance: 600
+    eType: 1
+    eFalloff: 0
+    pitchRandomisation: 0.2
+    priority: 128
+    crossfade: 
+    basePitch: 1
+    dopplerFactor: 0
+    localized: false
+    crc: 888211329
+  - enumName: LASER_FIRE
+    filename: laser
+    stream: false
+    loop: false
+    volume: 1
+    minDistance: 1
+    maxDistance: 1000
+    eType: 1
+    eFalloff: 0
+    pitchRandomisation: 0.2
+    priority: 128
+    crossfade: 
+    basePitch: 1
+    dopplerFactor: 0.3
+    localized: false
+    crc: 3614833766
+  - enumName: MISSION_01
+    filename: mission1
+    stream: true
+    loop: true
+    volume: 0.7
+    minDistance: 1
+    maxDistance: 1000
+    eType: 0
+    eFalloff: 0
+    pitchRandomisation: 0
+    priority: 128
+    crossfade: 
+    basePitch: 1
+    dopplerFactor: 0
+    localized: false
+    crc: 1395438147

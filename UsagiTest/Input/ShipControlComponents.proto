@@ -1,0 +1,25 @@
+/****************************************************************************
+//	Usagi Engine, Copyright © Vitei, Inc. 2013
+****************************************************************************/
+import 'nanopb.proto';
+import 'Engine/Maths/Maths.proto';
+import 'UsagiTest/Input/ShipControlEnums.proto';
+option (nanopb_fileopt).include = "UsagiTest/Input/ShipControlComponents.h";
+
+
+package Components;
+
+message ShipControlInput
+{
+	// FIXME Should be SHIP_BOOL_COUNT and SHIP_AXIS_COUNT for max_count
+	repeated bool inputBools = 1 [(nanopb).max_count = 4, (nanopb).has_max_count = true];
+	repeated float inputAxes = 2 [(nanopb).max_count = 4, (nanopb).has_max_count = true];
+}
+
+message PlayerShipController
+{
+	option (nanopb_msgopt).has_onactivate = true;
+	option (nanopb_msgopt).has_ondeactivate = true;
+
+	// Runtime data
+}

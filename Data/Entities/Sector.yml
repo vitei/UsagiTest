@@ -1,0 +1,11 @@
+TransformComponent:
+MatrixComponent:
+LightComponent:
+  spec: 
+    base:
+      kind: <%= Usg::LightKind::DIRECTIONAL %>  
+      ambient: { m_fR: 0.2, m_fG: 0.2, m_fB: 0.2, m_fA: 1.0 }
+      diffuse: { m_fR: 1.0, m_fG: 1.0, m_fB: 1.0, m_fA: 1.0 }
+      specular: { m_fR: 1.0, m_fG: 1.0, m_fB: 1.0, m_fA: 1.0 }
+      bShadow: true
+    direction: { x: 1.0, y: -1.0, z: 1.0 }

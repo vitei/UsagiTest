@@ -1,0 +1,20 @@
+import 'nanopb.proto';
+import 'Engine/Maths/Maths.proto';
+
+option (nanopb_fileopt).include='UsagiTest/Camera/CameraComponents.h';
+
+package usg.Components;
+
+message CameraComponent
+{
+
+	required float fFOV = 1 [default = 90.0];
+	required float fAspectRatio = 2 [default = 1.7777];
+	required float fNearPlaneDist = 3 [default = 0.1];
+	required float fFarPlaneDist = 4 [default = 1000.0];
+}
+
+message HMDCameraComponent
+{
+	
+}

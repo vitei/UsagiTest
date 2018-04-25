@@ -1,0 +1,30 @@
+Lifetime:
+MaxLifetime:
+  fMaxLifetime: 1.0
+StateComponent:
+MatrixComponent:
+SoundComponent:  
+ParticleComponent:
+  name: "HitImpact"
+  bSpawn: true
+  bIsScripted: true
+LightFadeComponent:
+  fFadeInTime: 0.05
+  fFadeOutTime: 0.95
+LightIntensityComponent:
+LightComponent:
+  spec: 
+    base:
+      kind: <%= Usg::LightKind::POINT %>  
+      ambient: { m_fR: 0.2, m_fG: 0.2, m_fB: 0.1, m_fA: 1.0 }
+      diffuse: { m_fR: 2.0, m_fG: 2.0, m_fB: 0.2, m_fA: 1.0 }
+      specular: { m_fR: 2.0, m_fG: 2.0, m_fB: 0.2, m_fA: 1.0 }
+      bShadow: false
+    atten:
+      bEnabled: true
+      fNear: 15.0
+      fFar: 40.0
+InitializerEvents:
+  - PlaySound:
+      uAudioID: <%= Zlib::crc32('IMPACT') %>
+      bPositional: true    

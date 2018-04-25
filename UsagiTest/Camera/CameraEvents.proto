@@ -1,0 +1,17 @@
+/****************************************************************************
+//	Usagi Engine, Copyright © Vitei, Inc. 2017
+****************************************************************************/
+import 'nanopb.proto';
+import "Engine/Maths/Maths.proto";
+
+package usg.Events;
+
+message SetAspectRatio
+{
+	required float fAspectRatio = 1 [default = 1.777];
+}
+
+message SetFieldOfView
+{
+	required float fFOV = 1 [default = 40.0];
+}
