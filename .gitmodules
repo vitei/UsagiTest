@@ -1,0 +1,3 @@
+[submodule "Usagi"]
+	path = Usagi
+	url = https://github.com/vitei/Usagi.git

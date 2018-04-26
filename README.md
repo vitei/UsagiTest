@@ -12,10 +12,12 @@ Getting up and running
 
 1. Clone this repository recursively (under advanced options in sourcetree or specify --recursive at the command line)
 
-1. Follow the instructions in the Usagin Engine README.md
+1. Follow the instructions in the Usagi [README.md](https://github.com/vitei/Usagi/blob/master/README.md)
 
-1. Open UsagiTest.sln and right-click GenerateProjects and select build 
+1. Open UsagiTest.sln and right-click ProjectGenerator and select build  
    This must currently be done per configuration
 
-1. Open UsagiTest.sln and right-click Ayataka and select build
-   It is recommended to do this in Release, Ayataka is the model converter and the fbx debug build is very slow 
+1. Set Usagi test as the startup project
+   Right click 'Set as start-up project'
+   
+1. Build and run
