@@ -1,17 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
@@ -36,12 +28,6 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <PlatformToolset>v141</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <PlatformToolset>v141</PlatformToolset>
-  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <Import Project="$(USAGI_DIR)\Engine\CommonProps.props" />
   <Import Project="$(USAGI_DIR)\Engine\ConditionalProps.props" />
@@ -58,16 +44,6 @@
     <OutDir>$(SolutionDir)\_rom\$(PlatformName)\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)_build\$(PlatformName)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <PreBuildEvent>
-      <Command>$(SolutionDir)Tools\bin\rake_vs.bat $(Configuration) win</Command>
-    </PreBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <PreBuildEvent>
-      <Command>$(SolutionDir)Tools\bin\rake_vs.bat $(Configuration) win</Command>
-    </PreBuildEvent>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEvent>
       <Command>$(SolutionDir)Tools\bin\rake_vs.bat $(Configuration) win</Command>
@@ -83,13 +59,13 @@
   </ImportGroup>
   <!-- Generate any project files that don't exist  -->
   <Target Name="Bootstrap" BeforeTargets="PostBuildEvent">
-    <Exec Command="$(SolutionDir)Tools\bin\rake_vs.bat $(Configuration) $(Platform) projects" />
+    <Exec Command="$(SolutionDir)Tools\bin\rake_vs.bat $(Configuration) win projects" />
     <OnError ExecuteTargets="TriggerSolutionReload" />
   </Target>
   <Target Name="TriggerSolutionReload">
     <Touch Files="$(SolutionDir)$(SolutionFileName)" />
   </Target>
   <Target Name="BootstrapClean" AfterTargets="Clean">
-    <Exec Command="$(SolutionDir)Tools\bin\rake_vs.bat $(Configuration) $(Platform) clean_projects" />
+    <Exec Command="$(SolutionDir)Tools\bin\rake_vs.bat $(Configuration) win clean_projects" />
   </Target>
 </Project>
