@@ -17,7 +17,7 @@ Getting up and running
 1. Open UsagiTest.sln and right-click ProjectGenerator and select build  
    This must currently be done per configuration
 
-1. Set Usagi test as the startup project
+1. Set Usagi test as the startup project  
    Right click 'Set as start-up project'
    
 1. Build and run
