@@ -138,14 +138,14 @@ void ModeSpaceFlight::InitPlayer()
 	spawnParams.SetOwnerNUID(usg::string_crc("Player0").Get());
 	usg::Entity player = entityLoader->pHandle->SpawnEntityFromTemplate("Entities/Player.vent", GetRootEntity(), spawnParams);
 
-	usg::Entity cameraEntity = player->GetChildEntityByName("cam");
+	usg::Entity cameraEntity = player->GetChildEntityByName(*dynamic_cast<usg::UnsafeComponentGetter*>(this), "cam");
 	ASSERT(cameraEntity != nullptr);
 	usg::Required<usg::CameraComponent> cam;
-	usg::GetComponent(cameraEntity, cam);
+	GetComponent(cameraEntity, cam);
 	cam.GetRuntimeData().pCamera = &m_pGameView->GetCamera();
 
 	usg::Required<usg::HMDCameraComponent> hmdCam;
-	usg::GetComponent(cameraEntity, hmdCam);
+	GetComponent(cameraEntity, hmdCam);
 	hmdCam.GetRuntimeData().pCamera = &m_pGameView->GetHMDCamera();
 
 	usg::SetAspectRatio setAspectRatio;
