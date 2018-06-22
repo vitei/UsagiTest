@@ -167,9 +167,8 @@ void ModeSpaceFlight::InitGameView(usg::GFXDevice* pDevice)
 		pHMD->GetRenderTargetDim(usg::IHeadMountedDisplay::Eye::Left, 1.0, uWidthTV, uHeightTV);
 	}
 
-	constexpr uint32 uPostFXTV = usg::PostFXSys::EFFECT_SMAA | usg::PostFXSys::EFFECT_BLOOM | usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_DEFERRED_SHADING;
+	constexpr uint32 uPostFXTV = 0;// usg::PostFXSys::EFFECT_SMAA | usg::PostFXSys::EFFECT_BLOOM | usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_DEFERRED_SHADING;
 	m_postFXTV.Init(pDevice, uWidthTV, uHeightTV, uPostFXTV);
-	usg::ResourceMgr::Inst()->RegisterRenderPass(m_postFXTV.GetRenderPass());
 	m_postFXTV.SetSkyTexture(pDevice, usg::ResourceMgr::Inst()->GetTexture(pDevice, "purplenebula"));
 	const usg::GFXBounds bounds = m_postFXTV.GetBounds();
 
@@ -226,7 +225,7 @@ void ModeSpaceFlight::Draw(usg::Display* pDisplay, usg::IHeadMountedDisplay* pHM
 	for (uint32 i = 0; i < uDrawCount; i++)
 	{
 		m_postFXTV.BeginScene(pImmContext, 0);
-		pImmContext->ClearRenderTarget(usg::RenderTarget::CLEAR_FLAG_DS | usg::RenderTarget::CLEAR_FLAG_COLOR_1);
+		//pImmContext->ClearRenderTarget(usg::RenderTarget::RT_FLAG_DS | usg::RenderTarget::RT_FLAG_COLOR);	// No longer necessary
 		m_pGameView->Draw(&m_postFXTV, pDisplay, pImmContext, nullptr, pHMD ? (i == 0 ? usg::VIEW_LEFT_EYE : usg::VIEW_RIGHT_EYE) : usg::VIEW_CENTRAL);
 		m_postFXTV.EndScene();
 
