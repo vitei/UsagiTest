@@ -265,7 +265,7 @@ void ModeSpaceFlight::PostDraw(usg::GFXDevice* pDevice)
 
 void ModeSpaceFlight::NotifyResize(usg::GFXDevice* pDevice, uint32 uDisplay, uint32 uWidth, uint32 uHeight)
 {
-//	m_postFXTV.Resize(pDevice, uWidth, uHeight);
+	m_postFXTV.Resize(pDevice, uWidth, uHeight);
 
 	Required<usg::EventManagerHandle, FromSelfOrParents> eventManager;
 	GetComponent(GetRootEntity(), eventManager);
