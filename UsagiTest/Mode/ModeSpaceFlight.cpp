@@ -53,7 +53,7 @@ void ModeSpaceFlight::InitText(usg::GFXDevice* pDevice)
 	m_2DDescriptor.Init(pDevice, pDevice->GetDescriptorSetLayout(usg::g_sGlobalDescriptors2D));
 	m_2DDescriptor.SetConstantSet(0, &m_2DConstants);
 	
-	m_text.Init(pDevice, usg::RenderPassHndl());
+	m_text.Init(pDevice, pDevice->GetDisplay(0)->GetRenderPass());
 	m_text.SetPosition(10.0f, 10.0f);
 	m_text.SetScale(usg::Vector2f(26.f, 26.f));
 	const usg::Keystring* string = usg::StringTable::Inst()->Find("Test");
@@ -167,7 +167,7 @@ void ModeSpaceFlight::InitGameView(usg::GFXDevice* pDevice)
 		pHMD->GetRenderTargetDim(usg::IHeadMountedDisplay::Eye::Left, 1.0, uWidthTV, uHeightTV);
 	}
 
-	constexpr uint32 uPostFXTV = 0;// usg::PostFXSys::EFFECT_SMAA | usg::PostFXSys::EFFECT_BLOOM | usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_DEFERRED_SHADING;
+	constexpr uint32 uPostFXTV = usg::PostFXSys::EFFECT_DEFERRED_SHADING | usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_SMAA | usg::PostFXSys::EFFECT_BLOOM;// usg::PostFXSys::EFFECT_DEFERRED_SHADING |usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_FXAA | usg::PostFXSys::EFFECT_DEFERRED_SHADING | usg::PostFXSys::EFFECT_BLOOM;// usg::PostFXSys::EFFECT_SMAA |  | usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_DEFERRED_SHADING;
 	m_postFXTV.Init(pDevice, uWidthTV, uHeightTV, uPostFXTV);
 	m_postFXTV.SetSkyTexture(pDevice, usg::ResourceMgr::Inst()->GetTexture(pDevice, "purplenebula"));
 	const usg::GFXBounds bounds = m_postFXTV.GetBounds();
@@ -217,10 +217,11 @@ void ModeSpaceFlight::PreDraw(usg::GFXDevice* pDevice, usg::GFXContext* pImmCont
 
 void ModeSpaceFlight::Draw(usg::Display* pDisplay, usg::IHeadMountedDisplay* pHMD, usg::GFXContext* pImmContext)
 {
+#if 0
 	usg::Scene& scene = GetScene();
 	scene.GetLightMgr().GlobalShadowRender(pImmContext, &scene);
 	scene.GetLightMgr().ViewShadowRender(pImmContext, &scene, m_pGameView->GetViewContext());
-
+	
 	uint32 uDrawCount = pHMD ? 2 : 1;
 	for (uint32 i = 0; i < uDrawCount; i++)
 	{
@@ -239,13 +240,14 @@ void ModeSpaceFlight::Draw(usg::Display* pDisplay, usg::IHeadMountedDisplay* pHM
 			pImmContext->TransferRect(m_postFXTV.GetFinalRT(), pDisplay, m_postFXTV.GetBounds(), m_pGameView->GetBounds());
 		}
 	}
-
-
+	
+#endif
 
 	// Still working on 2D
 	if(!pHMD)
 	{
 #if 1
+		pImmContext->RenderToDisplay(pDisplay);
 		pImmContext->SetDescriptorSet(&m_2DDescriptor, 0);
 		m_text.Draw(pImmContext);
 #endif
@@ -255,6 +257,7 @@ void ModeSpaceFlight::Draw(usg::Display* pDisplay, usg::IHeadMountedDisplay* pHM
 	{
 		pHMD->SubmitFrame();
 		pImmContext->TransferSpectatorDisplay(pHMD, pDisplay);
+		pImmContext->RenderToDisplay(pDisplay);
 	}	
 }
 
@@ -265,7 +268,7 @@ void ModeSpaceFlight::PostDraw(usg::GFXDevice* pDevice)
 
 void ModeSpaceFlight::NotifyResize(usg::GFXDevice* pDevice, uint32 uDisplay, uint32 uWidth, uint32 uHeight)
 {
-	m_postFXTV.Resize(pDevice, uWidth, uHeight);
+//	m_postFXTV.Resize(pDevice, uWidth, uHeight);
 
 	Required<usg::EventManagerHandle, FromSelfOrParents> eventManager;
 	GetComponent(GetRootEntity(), eventManager);

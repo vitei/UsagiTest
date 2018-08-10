@@ -107,10 +107,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 		case WM_SIZE:
 		{
-		/*	if (!bIsSizing && wparam != SIZE_MINIMIZED)
+			if (wparam == SIZE_MINIMIZED)
 			{
-				GameMessage('WSZE', nullptr);
-			}*/
+				GameMessage('WMIN', nullptr);
+			}
 		}
 		break;
 
