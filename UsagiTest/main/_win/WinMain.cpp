@@ -111,6 +111,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 			{
 				GameMessage('WMIN', nullptr);
 			}
+			else if (!bIsSizing)
+			{
+				GameMessage('WSZE', nullptr);
+			}
 		}
 		break;
 
