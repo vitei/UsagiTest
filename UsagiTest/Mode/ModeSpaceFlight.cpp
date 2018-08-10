@@ -217,7 +217,6 @@ void ModeSpaceFlight::PreDraw(usg::GFXDevice* pDevice, usg::GFXContext* pImmCont
 
 void ModeSpaceFlight::Draw(usg::Display* pDisplay, usg::IHeadMountedDisplay* pHMD, usg::GFXContext* pImmContext)
 {
-#if 0
 	usg::Scene& scene = GetScene();
 	scene.GetLightMgr().GlobalShadowRender(pImmContext, &scene);
 	scene.GetLightMgr().ViewShadowRender(pImmContext, &scene, m_pGameView->GetViewContext());
@@ -240,8 +239,6 @@ void ModeSpaceFlight::Draw(usg::Display* pDisplay, usg::IHeadMountedDisplay* pHM
 			pImmContext->TransferRect(m_postFXTV.GetFinalRT(), pDisplay, m_postFXTV.GetBounds(), m_pGameView->GetBounds());
 		}
 	}
-	
-#endif
 
 	// Still working on 2D
 	if(!pHMD)
