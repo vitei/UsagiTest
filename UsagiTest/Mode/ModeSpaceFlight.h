@@ -31,6 +31,8 @@ public:
 	void PostDraw(usg::GFXDevice* pDevice) override;
 
 	void NotifyResize(usg::GFXDevice* pDevice, uint32 uDisplay, uint32 uWidth, uint32 uHeight) override;
+	bool FinalTargetIsDisplay() const override { return true; };
+
 
 private:
 

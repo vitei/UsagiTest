@@ -53,7 +53,7 @@ void ModeSpaceFlight::InitText(usg::GFXDevice* pDevice)
 	m_2DDescriptor.Init(pDevice, pDevice->GetDescriptorSetLayout(usg::g_sGlobalDescriptors2D));
 	m_2DDescriptor.SetConstantSet(0, &m_2DConstants);
 	
-	m_text.Init(pDevice, usg::RenderPassHndl());
+	m_text.Init(pDevice, pDevice->GetDisplay(0)->GetRenderPass());
 	m_text.SetPosition(10.0f, 10.0f);
 	m_text.SetScale(usg::Vector2f(26.f, 26.f));
 	const usg::Keystring* string = usg::StringTable::Inst()->Find("Test");
@@ -138,14 +138,14 @@ void ModeSpaceFlight::InitPlayer()
 	spawnParams.SetOwnerNUID(usg::string_crc("Player0").Get());
 	usg::Entity player = entityLoader->pHandle->SpawnEntityFromTemplate("Entities/Player.vent", GetRootEntity(), spawnParams);
 
-	usg::Entity cameraEntity = player->GetChildEntityByName("cam");
+	usg::Entity cameraEntity = player->GetChildEntityByName(*dynamic_cast<usg::UnsafeComponentGetter*>(this), "cam");
 	ASSERT(cameraEntity != nullptr);
 	usg::Required<usg::CameraComponent> cam;
-	usg::GetComponent(cameraEntity, cam);
+	GetComponent(cameraEntity, cam);
 	cam.GetRuntimeData().pCamera = &m_pGameView->GetCamera();
 
 	usg::Required<usg::HMDCameraComponent> hmdCam;
-	usg::GetComponent(cameraEntity, hmdCam);
+	GetComponent(cameraEntity, hmdCam);
 	hmdCam.GetRuntimeData().pCamera = &m_pGameView->GetHMDCamera();
 
 	usg::SetAspectRatio setAspectRatio;
@@ -167,9 +167,8 @@ void ModeSpaceFlight::InitGameView(usg::GFXDevice* pDevice)
 		pHMD->GetRenderTargetDim(usg::IHeadMountedDisplay::Eye::Left, 1.0, uWidthTV, uHeightTV);
 	}
 
-	constexpr uint32 uPostFXTV = usg::PostFXSys::EFFECT_SMAA | usg::PostFXSys::EFFECT_BLOOM | usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_DEFERRED_SHADING;
+	constexpr uint32 uPostFXTV = usg::PostFXSys::EFFECT_DEFERRED_SHADING | usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_SMAA | usg::PostFXSys::EFFECT_BLOOM;// usg::PostFXSys::EFFECT_DEFERRED_SHADING |usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_FXAA | usg::PostFXSys::EFFECT_DEFERRED_SHADING | usg::PostFXSys::EFFECT_BLOOM;// usg::PostFXSys::EFFECT_SMAA |  | usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_DEFERRED_SHADING;
 	m_postFXTV.Init(pDevice, uWidthTV, uHeightTV, uPostFXTV);
-	usg::ResourceMgr::Inst()->RegisterRenderPass(m_postFXTV.GetRenderPass());
 	m_postFXTV.SetSkyTexture(pDevice, usg::ResourceMgr::Inst()->GetTexture(pDevice, "purplenebula"));
 	const usg::GFXBounds bounds = m_postFXTV.GetBounds();
 
@@ -221,12 +220,12 @@ void ModeSpaceFlight::Draw(usg::Display* pDisplay, usg::IHeadMountedDisplay* pHM
 	usg::Scene& scene = GetScene();
 	scene.GetLightMgr().GlobalShadowRender(pImmContext, &scene);
 	scene.GetLightMgr().ViewShadowRender(pImmContext, &scene, m_pGameView->GetViewContext());
-
+	
 	uint32 uDrawCount = pHMD ? 2 : 1;
 	for (uint32 i = 0; i < uDrawCount; i++)
 	{
 		m_postFXTV.BeginScene(pImmContext, 0);
-		pImmContext->ClearRenderTarget(usg::RenderTarget::CLEAR_FLAG_DS | usg::RenderTarget::CLEAR_FLAG_COLOR_1);
+		//pImmContext->ClearRenderTarget(usg::RenderTarget::RT_FLAG_DS | usg::RenderTarget::RT_FLAG_COLOR);	// No longer necessary
 		m_pGameView->Draw(&m_postFXTV, pDisplay, pImmContext, nullptr, pHMD ? (i == 0 ? usg::VIEW_LEFT_EYE : usg::VIEW_RIGHT_EYE) : usg::VIEW_CENTRAL);
 		m_postFXTV.EndScene();
 
@@ -241,12 +240,11 @@ void ModeSpaceFlight::Draw(usg::Display* pDisplay, usg::IHeadMountedDisplay* pHM
 		}
 	}
 
-
-
 	// Still working on 2D
 	if(!pHMD)
 	{
 #if 1
+		pImmContext->RenderToDisplay(pDisplay);
 		pImmContext->SetDescriptorSet(&m_2DDescriptor, 0);
 		m_text.Draw(pImmContext);
 #endif
@@ -256,6 +254,7 @@ void ModeSpaceFlight::Draw(usg::Display* pDisplay, usg::IHeadMountedDisplay* pHM
 	{
 		pHMD->SubmitFrame();
 		pImmContext->TransferSpectatorDisplay(pHMD, pDisplay);
+		pImmContext->RenderToDisplay(pDisplay);
 	}	
 }
 

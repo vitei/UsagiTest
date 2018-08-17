@@ -34,6 +34,8 @@ static void ToggleFullScreen(const HWND hwnd)
 {
 	const DWORD dwStyle = GetWindowLong(hwnd, GWL_STYLE);
 
+	GameMessage('ONSZ', nullptr);
+
 	if (dwStyle & WS_OVERLAPPEDWINDOW)
 	{
 		MONITORINFO monitorInfo = { sizeof(monitorInfo) };
@@ -58,11 +60,13 @@ static void ToggleFullScreen(const HWND hwnd)
 		SetWindowPlacement(hwnd, &g_OldWindowPlacement);
 		SetWindowPos(hwnd, nullptr, 0, 0, 0, 0, uFlags);
 	}
+	GameMessage('WSZE', nullptr);
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	static const WPARAM VK_RESERVED = 0xFF;
+	static bool bIsSizing = false;
 
 	switch (msg)
 	{
@@ -103,10 +107,30 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 		case WM_SIZE:
 		{
-			if(wparam != SIZE_MINIMIZED)
+			if (wparam == SIZE_MINIMIZED)
+			{
+				GameMessage('WMIN', nullptr);
+			}
+			else if (!bIsSizing)
 			{
 				GameMessage('WSZE', nullptr);
 			}
+		}
+		break;
+
+		case WM_ENTERSIZEMOVE:
+		{
+			bIsSizing = true;
+		}
+		break;
+		case WM_EXITSIZEMOVE:
+		{
+			if (wparam != SIZE_MINIMIZED)
+			{
+				GameMessage('WSZE', nullptr);
+			}
+
+			bIsSizing = false;
 		}
 		break;
 
@@ -162,7 +186,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 			break;
 
 		case WM_DESTROY:
-			PostQuitMessage(0);
 			GameExit();
 			break;
 
