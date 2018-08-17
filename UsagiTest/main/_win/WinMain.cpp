@@ -186,7 +186,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 			break;
 
 		case WM_DESTROY:
-			PostQuitMessage(0);
 			GameExit();
 			break;
 
