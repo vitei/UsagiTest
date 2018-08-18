@@ -5,6 +5,7 @@ A test application for the Usagi engine.
 Meant to show the correct usage rather than act as a demonstration of the features.  
 Whilst submodules are far from perfect the engine is currently a submodule of this test.
 
+![](Documents/Images/PreviewImage.jpg)
 
 Getting up and running
 ----------------------
