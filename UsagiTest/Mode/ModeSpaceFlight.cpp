@@ -231,8 +231,7 @@ void ModeSpaceFlight::Draw(usg::Display* pDisplay, usg::IHeadMountedDisplay* pHM
 
 		if (pHMD)
 		{
-			usg::IHeadMountedDisplay::Eye eye = i == 0 ? usg::IHeadMountedDisplay::Eye::Left : usg::IHeadMountedDisplay::Eye::Right;
-			pHMD->Transfer(pImmContext, eye, m_postFXTV.GetFinalRT());
+			pImmContext->TransferToHMD(m_postFXTV.GetFinalRT(), pHMD, i == 0);
 		}
 		else
 		{

@@ -24,7 +24,7 @@ using namespace usg;
 // Declare the games main function
 namespace usg
 {
-	bool GameMain();
+	bool GameMain(const char** dllModules, uint32 uModuleCount);
 	bool GameExit();
 	void GameMessage(const uint32 messageID, const void* const pParameters);
 
@@ -208,14 +208,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpcmdline
 	settings.uX = 0; settings.uY = 0; settings.uWidth = g_uWindowWidth; settings.uHeight = g_uWindowHeight;
 	settings.bWindowed = !g_bFullScreen; settings.hardwareHndl = nullptr;
 	str::Copy(settings.name, "Virtual Screen", sizeof(settings.name));
-	const WindHndl hndl = WINUTIL::CreateDisplayWindow("Usagi", &settings, false);
+	const WindHndl hndl = WINUTIL::CreateDisplayWindow(WindowProc, "Usagi", &settings, false);
 
 #ifndef USE_VULKAN
 	GFXDevice_ps::InitOGLContext(hndl, 1);
 #endif
 
 	usg::OS::Initialize();
-	GameMain();
+	GameMain(nullptr, 0);
 	usg::OS::ShutDown();
 
 	return 0;
