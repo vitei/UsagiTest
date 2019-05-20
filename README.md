@@ -15,7 +15,9 @@ Getting up and running
 
 1. Follow the instructions in the Usagi [README.md](https://github.com/vitei/Usagi/blob/master/README.md)
 
-1. Open UsagiTest.sln and right-click ProjectGenerator and select build  
+1. Run 'rake projects' from the command line  
+   or  
+   Open UsagiTest.sln and right-click ProjectGenerator and select build  
    This must currently be done per configuration
 
 1. Set Usagi test as the startup project  
