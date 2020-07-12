@@ -3,7 +3,7 @@ UsagiTest
 
 A test application for the Usagi engine.  
 Meant to show the correct usage rather than act as a demonstration of the features.  
-Whilst submodules are far from perfect the engine is currently a submodule of this test.
+Work is *not* being done on this project internally. It is only periodically updated to a (very basic) working state for version number increases because there is nothing larger we can make publically available at this time.  
 
 ![](Documents/Images/PreviewImage.jpg)
 
