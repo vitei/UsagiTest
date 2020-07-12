@@ -7,7 +7,9 @@
 #include "Engine/HID/Input.h"
 #include "Engine/Graphics/Device/IHeadMountedDisplay.h"
 #include "Engine/Layout/Global2D.h"
+#include "Engine/Layout/StringTable.h"
 #include "Engine/Scene/ViewContext.h"
+#include "Engine/Graphics/Lights/LightMgr.h"
 #include "Engine/Framework/EntitySpawnParams.h"
 #include "Engine/Graphics/Device/GFXContext.h"
 #include "Engine/Core/stl/utility.h"
@@ -46,18 +48,18 @@ void ModeSpaceFlight::InitRoot()
 	entityLoader->pHandle->ApplyTemplateToEntity("Entities/Root.vent", GetRootEntity());
 }
 
-void ModeSpaceFlight::InitText(usg::GFXDevice* pDevice)
+void ModeSpaceFlight::InitText(usg::GFXDevice* pDevice, usg::ResourceMgr* pMgr)
 {
 	// Temporary 2D test code
 	m_2DConstants.Init(pDevice, usg::g_global2DCBDecl);
 	m_2DDescriptor.Init(pDevice, pDevice->GetDescriptorSetLayout(usg::g_sGlobalDescriptors2D));
 	m_2DDescriptor.SetConstantSet(0, &m_2DConstants);
 	
-	m_text.Init(pDevice, pDevice->GetDisplay(0)->GetRenderPass());
+	m_text.Init(pDevice, pMgr, pDevice->GetDisplay(0)->GetRenderPass());
 	m_text.SetPosition(10.0f, 10.0f);
 	m_text.SetScale(usg::Vector2f(26.f, 26.f));
-	const usg::Keystring* string = usg::StringTable::Inst()->Find("Test");
-	m_text.SetText(string->text);
+	const usg::StringTable::KeyString& string = usg::StringTable::Inst()->Find("Test");
+	m_text.SetText(string.pStr->text);
 	m_text.SetFont(usg::ResourceMgr::Inst()->GetFont(pDevice, "FontDef"));
 	m_text.SetGradationEndColor(usg::Color(0.8f, 0.8f, 0.8f, 1.0f));
 	m_text.SetGradationStartColor(usg::Color(0.3f, 0.3f, 0.3f, 1.0f));
@@ -74,22 +76,24 @@ void ModeSpaceFlight::InitText(usg::GFXDevice* pDevice)
 	m_2DDescriptor.UpdateDescriptors(pDevice);
 }
 
-void ModeSpaceFlight::Init(usg::GFXDevice* pDevice)
+void ModeSpaceFlight::Init(usg::GFXDevice* pDevice, usg::ResourceMgr* pMgr)
 {
-	Inherited::Init(pDevice);
+	Inherited::Init(pDevice, pMgr);
 
 	usg::Scene& scene = GetScene();
 	usg::AABB worldBounds;
-	worldBounds.SetMinMax(-500 * usg::V3F_ONE, 500 * usg::V3F_ONE);
-	scene.Init(pDevice, worldBounds);
+	worldBounds.SetMinMax(-500 * usg::Vector3f::ONE, 500 * usg::Vector3f::ONE);
+	scene.Init(pDevice, pMgr, worldBounds);
 
 	InitRoot();
-	InitGameView(pDevice);
+	InitGameView(pDevice, pMgr);
 	InitScene();
 	InitPlayer();
-	InitText(pDevice);
+	InitText(pDevice, pMgr);
 
 	usg::MusicManager::Create()->PlayMusic(MISSION_01, 1.0f, usg::MusicManager::FADE_TYPE_WAIT, usg::MusicManager::FADE_TYPE_FADE, 0.3f, 0);
+
+	GetScene().SetActiveCamera(utl::CRC32("ExternalCam"), 0);
 }
 
 void ModeSpaceFlight::CleanUp(usg::GFXDevice* pDevice)
@@ -115,9 +119,10 @@ void ModeSpaceFlight::InitScene()
 	spawnParams.SetTransform(initialTrans);
 	entityLoader->pHandle->SpawnEntityFromTemplate("Entities/Sector.vent", GetRootEntity(), spawnParams);
 
-	initialTrans.position.Assign(0.0f, -150.0f, 300.0f);
-	spawnParams.SetTransform(initialTrans);
-	entityLoader->pHandle->SpawnEntityFromTemplate("Entities/Cube.vent", GetRootEntity(), spawnParams);
+	// Disabling this model as it has issues
+	//initialTrans.position.Assign(0.0f, -150.0f, 300.0f);
+	//spawnParams.SetTransform(initialTrans);
+	//entityLoader->pHandle->SpawnEntityFromTemplate("Entities/Cube.vent", GetRootEntity(), spawnParams);
 }
 
 void ModeSpaceFlight::InitPlayer()
@@ -140,21 +145,18 @@ void ModeSpaceFlight::InitPlayer()
 
 	usg::Entity cameraEntity = player->GetChildEntityByName(*dynamic_cast<usg::UnsafeComponentGetter*>(this), "cam");
 	ASSERT(cameraEntity != nullptr);
-	usg::Required<usg::CameraComponent> cam;
-	GetComponent(cameraEntity, cam);
-	cam.GetRuntimeData().pCamera = &m_pGameView->GetCamera();
-
-	usg::Required<usg::HMDCameraComponent> hmdCam;
-	GetComponent(cameraEntity, hmdCam);
-	hmdCam.GetRuntimeData().pCamera = &m_pGameView->GetHMDCamera();
 
 	usg::SetAspectRatio setAspectRatio;
 	usg::SetAspectRatio_init(&setAspectRatio);
 	setAspectRatio.fAspectRatio = m_pGameView->GetBounds().width / (float32)(m_pGameView->GetBounds().height);
 	eventManager->handle->RegisterEventWithEntity(cameraEntity, setAspectRatio, ON_ENTITY);
+
+#ifdef DEBUG_BUILD
+	entityLoader->pHandle->SpawnEntityFromTemplate("Entities/DebugCamera.vent", GetRootEntity(), spawnParams);
+#endif
 }
 
-void ModeSpaceFlight::InitGameView(usg::GFXDevice* pDevice)
+void ModeSpaceFlight::InitGameView(usg::GFXDevice* pDevice, usg::ResourceMgr* pMgr)
 {
 	usg::Scene& scene = GetScene();
 
@@ -167,8 +169,8 @@ void ModeSpaceFlight::InitGameView(usg::GFXDevice* pDevice)
 		pHMD->GetRenderTargetDim(usg::IHeadMountedDisplay::Eye::Left, 1.0, uWidthTV, uHeightTV);
 	}
 
-	constexpr uint32 uPostFXTV = usg::PostFXSys::EFFECT_DEFERRED_SHADING | usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_SMAA | usg::PostFXSys::EFFECT_BLOOM;// usg::PostFXSys::EFFECT_DEFERRED_SHADING |usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_FXAA | usg::PostFXSys::EFFECT_DEFERRED_SHADING | usg::PostFXSys::EFFECT_BLOOM;// usg::PostFXSys::EFFECT_SMAA |  | usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_DEFERRED_SHADING;
-	m_postFXTV.Init(pDevice, uWidthTV, uHeightTV, uPostFXTV);
+	constexpr uint32 uPostFXTV = usg::PostFXSys::EFFECT_DEFERRED_SHADING | usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_SMAA | usg::PostFXSys::EFFECT_SSAO;// usg::PostFXSys::EFFECT_DEFERRED_SHADING |usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_FXAA | usg::PostFXSys::EFFECT_DEFERRED_SHADING | usg::PostFXSys::EFFECT_BLOOM;// usg::PostFXSys::EFFECT_SMAA |  | usg::PostFXSys::EFFECT_SKY_FOG | usg::PostFXSys::EFFECT_DEFERRED_SHADING;
+	m_postFXTV.Init(pDevice, pMgr, uWidthTV, uHeightTV, uPostFXTV);
 	m_postFXTV.SetSkyTexture(pDevice, usg::ResourceMgr::Inst()->GetTexture(pDevice, "purplenebula"));
 	const usg::GFXBounds bounds = m_postFXTV.GetBounds();
 
@@ -177,31 +179,18 @@ void ModeSpaceFlight::InitGameView(usg::GFXDevice* pDevice)
 	viewBounds.width = uWidthTV;
 	viewBounds.height = uHeightTV;
 		
-	usg::GameView* pView = vnew(usg::ALLOC_OBJECT)usg::GameView(pDevice, scene, m_postFXTV, viewBounds, 40.0f, 0.1f, 1000.0f);
+	usg::GameView* pView = vnew(usg::ALLOC_OBJECT)usg::GameView(pDevice, scene, pMgr, m_postFXTV, viewBounds, 40.0f, 0.1f, 1000.0f);
 	m_pGameView = pView;
 }
 
 bool ModeSpaceFlight::Update(float fElapsed)
 {
-	if (usg::Input::GetGamepad(0)->GetButtonDown(usg::GAMEPAD_BUTTON_X))
-	{
-		m_debugCam.SetActive(!m_debugCam.GetActive());
-		m_debugCam.SetMatrix(m_pGameView->GetCamera().GetModelMatrix());
-	}
-	if (m_debugCam.GetActive())
-	{
-		usg::Scene& scene = GetScene();
-		scene.PreUpdate();
-		m_debugCam.Update(fElapsed);
-		m_pGameView->GetCamera().SetModelMatrix(m_debugCam.GetModelMat());
-		m_pGameView->GetHMDCamera().SetModelMatrix(m_debugCam.GetModelMat());
-		m_pGameView->GetHMDCamera().Update();
+	bool bDebug = GetScene().GetViewContext(0)->GetCamera()->GetID() == utl::CRC32("DebugCam");
 
-		scene.TransformUpdate(0.0f);
-	}
-	else
+
+	m_postFXTV.Update(&GetScene(), fElapsed);
 	{
-		Inherited::Update(fElapsed);
+		Inherited::Update(bDebug ? 0.0f : fElapsed);
 	}
 	return false;
 }
@@ -213,12 +202,13 @@ void ModeSpaceFlight::PreDraw(usg::GFXDevice* pDevice, usg::GFXContext* pImmCont
 		usg::Scene& scene = GetScene();
 		scene.Update(pDevice);
 	}
+	m_postFXTV.UpdateGPU(pDevice);
 }
 
 void ModeSpaceFlight::Draw(usg::Display* pDisplay, usg::IHeadMountedDisplay* pHMD, usg::GFXContext* pImmContext)
 {
 	usg::Scene& scene = GetScene();
-	scene.GetLightMgr().GlobalShadowRender(pImmContext, &scene);
+	scene.PreDraw(pImmContext);
 	scene.GetLightMgr().ViewShadowRender(pImmContext, &scene, m_pGameView->GetViewContext());
 	
 	uint32 uDrawCount = pHMD ? 2 : 1;

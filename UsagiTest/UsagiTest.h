@@ -25,7 +25,7 @@ public:
 	explicit UsagiTest();
 	virtual ~UsagiTest();
 
-	virtual void Init(usg::GFXDevice* pDevice) override;
+	virtual void Init(usg::GFXDevice* pDevice, usg::ResourceMgr* pResMgr) override;
 
 private:
 	void SetNextMode(ModeType eMode);

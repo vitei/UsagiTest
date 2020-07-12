@@ -24,13 +24,14 @@ public:
 	virtual void Update(float timeDelta );
 	void GetInput(ShipControlInput& input) const;
 
-
+	bool ToggleDebugCam() const { return m_debugCam.GetBool(); }
 private:
 	void ClearInputMappings();
 
 	MappingOutput		m_buttons[SHIP_BOOL_COUNT];
 	MappingOutput		m_axes[SHIP_AXIS_COUNT];
 
+	MappingOutput		m_debugCam;
 
 };
 

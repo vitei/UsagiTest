@@ -1,8 +1,10 @@
 #include "Engine/Common/Common.h"
 #include "Engine/Framework/System.h"
+#include "Engine/Framework/EventManager.h"
 #include "Engine/Framework/GameComponents.h"
 #include "Engine/Framework/FrameworkComponents.pb.h"
 #include "UsagiTest/Input/ShipControlComponents.pb.h"
+#include "Engine/Debug/DebugEvents.pb.h"
 #include "UsagiTest/Input/ShipController.h"
 
 namespace Systems
@@ -12,7 +14,9 @@ namespace Systems
 	public:
 		struct Inputs
 		{
+			usg::Required<EventManagerHandle, FromSelfOrParents> eventManager;
 			usg::Required<PlayerShipController> controller;
+			usg::Required<usg::SimulationActive, FromSelfOrParents> simActive;
 		};
 
 		struct Outputs
@@ -28,6 +32,13 @@ namespace Systems
 		{
 			outputs.controller.GetRuntimeData().pController->Update(fDelta);
 			outputs.controller.GetRuntimeData().pController->GetInput(outputs.shipInput.Modify());
+
+			if (outputs.controller.GetRuntimeData().pController->ToggleDebugCam())
+			{
+				usg::RequestDebugCameraState evt;
+				evt.bEnable = inputs.simActive->bActive;
+				inputs.eventManager->handle->RegisterEvent(evt);
+			}
 		}
 	};
 }

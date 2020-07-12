@@ -26,6 +26,8 @@ void ShipController::Init()
 	Inherited::CreateAxisMapping(GAMEPAD_AXIS_RIGHT_X, AXIS_TYPE_ABSOLUTE, m_axes[SHIP_AXIS_ROLL]);
 	Inherited::CreateButtonMapping(GAMEPAD_BUTTON_R, m_axes[SHIP_AXIS_THROTTLE], usg::BUTTON_STATE_HELD);
 	Inherited::CreateButtonMapping(GAMEPAD_BUTTON_ZR, m_buttons[SHIP_BOOL_FIRE]);
+
+	Inherited::CreateButtonMapping(GAMEPAD_BUTTON_X, m_debugCam);
 }
 
 void ShipController::Update(float timeDelta)
@@ -46,6 +48,8 @@ void ShipController::ClearInputMappings()
 	{
 		m_axes[i].Clear();
 	}
+
+	m_debugCam.Clear();
 }
 
 

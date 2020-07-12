@@ -58,9 +58,9 @@ usg::ModeLoadFunc UsagiTest::GetLoadFunc() const
 }
 
 
-void UsagiTest::Init(usg::GFXDevice* pDevice)
+void UsagiTest::Init(usg::GFXDevice* pDevice, usg::ResourceMgr* pResMgr)
 {
-	Inherited::Init(pDevice);
+	Inherited::Init(pDevice, pResMgr);
 //	usg::ModuleManager::Inst()->LoadModule("Oculus.dll");
 	HookupModules(pDevice);
 

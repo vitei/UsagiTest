@@ -39,11 +39,13 @@ InitializerEvents:
 Children:
   - Identifier:
       name: "cam"
-    HMDCameraComponent:
+    #HMDCameraComponent:
     CameraComponent:
       fFOV: 40.0
       fNearPlaneDist: 0.1
       fFarPlaneDist: 1000.0
+      bForceSwitch: true
+      uCamId: <%= Zlib::crc32('ExternalCam') %>            
     TransformComponent:
       position: {x: 0, y: 6.0, z: -25.0}
     MatrixComponent:

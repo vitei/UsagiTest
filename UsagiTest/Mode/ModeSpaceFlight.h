@@ -23,7 +23,7 @@ public:
 	ModeSpaceFlight();
 	virtual ~ModeSpaceFlight();
 
-	void Init(usg::GFXDevice* pDevice) override;
+	void Init(usg::GFXDevice* pDevice, usg::ResourceMgr* pMgr) override;
 	void CleanUp(usg::GFXDevice* pDevice) override;
 	bool Update(float fElapsed) override;
 	void PreDraw(usg::GFXDevice* pDevice, usg::GFXContext* pImmContext) override;
@@ -38,9 +38,9 @@ private:
 
 	void InitRoot();
 	void InitScene();
-	void InitGameView(usg::GFXDevice* pDevice);
+	void InitGameView(usg::GFXDevice* pDevice, usg::ResourceMgr* pMgr);
 	void InitPlayer();
-	void InitText(usg::GFXDevice* pDevice);
+	void InitText(usg::GFXDevice* pDevice, usg::ResourceMgr* pMgr);
 
 	usg::DescriptorSet m_2DDescriptor;
 	usg::ConstantSet	m_2DConstants;
