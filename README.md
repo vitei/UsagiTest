@@ -3,7 +3,7 @@ UsagiTest
 
 A test application for the Usagi engine.  
 Meant to show the correct usage rather than act as a demonstration of the features.  
-Work is *not* being done on this project internally. It is only periodically updated to a (very basic) working state for version number increases because there is nothing larger we can make publically available at this time.  
+Work is *not* being done on this project internally. It is only periodically updated to a (very basic) working state for version number increases because there is nothing more complex that can be made publically available at this time.  
 
 ![](Documents/Images/PreviewImage.jpg)
 
