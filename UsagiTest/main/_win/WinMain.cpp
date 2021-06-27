@@ -204,9 +204,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpcmdline
 {
 	WINUTIL::Init(hInstance);
 
-	usg::DisplaySettings settings;
-	settings.uX = 0; settings.uY = 0; settings.uWidth = g_uWindowWidth; settings.uHeight = g_uWindowHeight;
-	settings.bWindowed = !g_bFullScreen; settings.hardwareHndl = nullptr;
+	usg::DisplayMode settings;
+	settings.screenDim.x = 0; settings.screenDim.y = 0; settings.screenDim.width = g_uWindowWidth; settings.screenDim.height = g_uWindowHeight;
+	settings.bWindowed = !g_bFullScreen; settings.parentHndl = NULL;
 	str::Copy(settings.name, "Virtual Screen", sizeof(settings.name));
 	const WindHndl hndl = WINUTIL::CreateDisplayWindow(WindowProc, "Usagi", &settings, false);
 

@@ -24,7 +24,7 @@ public:
 	virtual ~ModeSpaceFlight();
 
 	void Init(usg::GFXDevice* pDevice, usg::ResourceMgr* pMgr) override;
-	void CleanUp(usg::GFXDevice* pDevice) override;
+	void Cleanup(usg::GFXDevice* pDevice) override;
 	bool Update(float fElapsed) override;
 	void PreDraw(usg::GFXDevice* pDevice, usg::GFXContext* pImmContext) override;
 	void Draw(usg::Display* pDisplay, usg::IHeadMountedDisplay* pHMD, usg::GFXContext* pImmContext) override;

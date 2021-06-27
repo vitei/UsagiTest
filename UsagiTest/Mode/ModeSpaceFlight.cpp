@@ -96,15 +96,15 @@ void ModeSpaceFlight::Init(usg::GFXDevice* pDevice, usg::ResourceMgr* pMgr)
 	GetScene().SetActiveCamera(utl::CRC32("ExternalCam"), 0);
 }
 
-void ModeSpaceFlight::CleanUp(usg::GFXDevice* pDevice)
+void ModeSpaceFlight::Cleanup(usg::GFXDevice* pDevice)
 {
 	usg::Scene& scene = GetScene();
-	m_pGameView->CleanUp(pDevice, scene);
-	m_text.CleanUp(pDevice);
-	m_2DConstants.CleanUp(pDevice);
-	m_2DDescriptor.CleanUp(pDevice);
-	m_postFXTV.CleanUp(pDevice);
-	Inherited::CleanUp(pDevice);
+	m_pGameView->Cleanup(pDevice, scene);
+	m_text.Cleanup(pDevice);
+	m_2DConstants.Cleanup(pDevice);
+	m_2DDescriptor.Cleanup(pDevice);
+	m_postFXTV.Cleanup(pDevice);
+	Inherited::Cleanup(pDevice);
 }
 
 void ModeSpaceFlight::InitScene()
@@ -179,7 +179,7 @@ void ModeSpaceFlight::InitGameView(usg::GFXDevice* pDevice, usg::ResourceMgr* pM
 	viewBounds.width = uWidthTV;
 	viewBounds.height = uHeightTV;
 		
-	usg::GameView* pView = vnew(usg::ALLOC_OBJECT)usg::GameView(pDevice, scene, pMgr, m_postFXTV, viewBounds, 40.0f, 0.1f, 1000.0f);
+	usg::GameView* pView = vnew(usg::ALLOC_OBJECT)usg::GameView(pDevice, scene, pMgr, m_postFXTV, viewBounds);
 	m_pGameView = pView;
 }
 
